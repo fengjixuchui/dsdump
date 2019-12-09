@@ -280,6 +280,12 @@ static void ensureSafeAddressForMMap(size_t memory_size) {
                     char seg_name[17] = {};
                     memcpy(seg_name, cmd->segname, 16);
                     NSString *segmentKey = [NSString stringWithUTF8String:seg_name];
+                    if (cmd->flags & SG_PROTECTED_VERSION_1 && !xref_options.symbol_mode) {
+                        // FIXME, implement protected executables
+                        // https://github.com/DerekSelander/dsdump/issues/6
+                        printf("%s is protected, come again at a later beta\n", cmd->segname);
+                        exit(1);
+                    }
                     self.segmentCommandsDictionary[segmentKey] = @((uintptr_t)cmd);
                     
                     for (int j = 0; j < cmd->nsects; j++) {
@@ -295,7 +301,7 @@ static void ensureSafeAddressForMMap(size_t memory_size) {
                         [self.sectionCommandsArray addObject:@(sec_ptr)];
                         payload::sections.push_back(&sections[j]);
                         
-                        if (strcmp(section.segname, "__DATA") == 0 && strcmp(section.sectname, "__la_symbol_ptr") == 0) {
+                        if (strcmp(section.segname, SEG_DATA) == 0 && strcmp(section.sectname, "__la_symbol_ptr") == 0) {
                             self.lazy_ptr_section = &sections[j]; //calloc(1, sizeof(struct section_64));
                         }
                     }
