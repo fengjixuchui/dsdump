@@ -152,7 +152,7 @@ git clone https://github.com/apple/swift.git
 git checkout 75670c17272a993ed798cee7e31c20590e94118b
 
 # Use the Swift update helper script to grab everything else 
-./swift/utils/update-checkout --clone
+ ./swift/utils/update-checkout --clone-with-ssh   --tag swift-5.1.4-RELEASE
 ```
 Comment out any remaining problematic code after a build, remove methods in `Metadata.h` as needed (i.e. problematic ARC bridging code on line 700)
 
@@ -162,7 +162,7 @@ Alternatively, you can skip all of this by simply grabbing the compiled `dsdump`
 
 Compiled SHA1
 ```
-SHA1: 17149fce3a73bd2614d21901ec791ef64815370a
+SHA1: 0084dfbe9ef0971b316304365b5a582bd9b65763
 ```
 
 ### Credits
